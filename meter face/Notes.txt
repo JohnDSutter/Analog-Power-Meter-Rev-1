@@ -1,0 +1,90 @@
+
+Width:	59.5
+Height:	35.39
+
+Image:	1411x836 -> 59.7x35.39
+
+33.39 28.94
+
+33.39
+28.94
+-----
+62.33
+-----
+31.165
+
+30.90 center-to-center
+21.7 inner gap
+
+
+Meter center to first arc: 30mm
+Arc coverage: 90 degrees
+
+
+
+scale radius
+  31.1 mm
+
+cutout radius
+  10.6
+
+mount hole
+  c-c 31.5
+  hole radius  1.3
+
+coutout
+  width 22mm
+  height 2mm
+
+Examples
+Galva
+  1 scales
+  no cutout
+  no holes
+  120 deg?
+Galva_Arc
+  whole lotta action
+  5 scales
+  70 deg
+  cutout
+  holes
+Galva_Arc220
+  whole lotta action
+  5 scales
+  240 deg
+  cutout
+  holes
+Galva_Arc_ex6
+  2 scales 
+  cutout
+  holes
+Galva_Arc_2W
+  2 W scales, interesting..
+  whole lotta action
+  5 scales
+  70 deg
+  cutout
+  holes
+  rounded corners
+
+GalvEx1
+  2 scales
+  120 deg
+  no cutout
+  no holes
+ 
+GalEx3
+  Interesting scales 
+    linear
+    -10 to 13 dBm
+
+
+GalvEx7
+  4 scales including nonlinear W!!! **
+
+GalvEx8.dat
+  Milliwatts, interesting..
+
+GalvEx9.dat
+  Manual scles by lists
+

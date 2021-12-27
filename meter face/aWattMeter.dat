@@ -1,0 +1,408 @@
+'
+' F1 => Help
+' F2 => current command input mask
+
+'ZoomIni = 1.5
+
+'CT =59.5,39.4,5
+CT=59.5,39.4,5
+'RefCur = %CTx,%CTy
+
+'%X0 = 29.75
+'%Y0 = 5
+%X0 = 150
+%Y0 = 120
+%C_CT = black
+%e_CT = 0.3
+
+%Plate_Width = 59.5
+%Plate_Height = 35
+
+%X1 == %Plate_Width/2
+%Y1 = -3.5
+
+%C_Plate = cyan	' plate color
+%e_Plate = .1	' plate line thickness
+%R_Plate = 1§D	' radius of the plate roundings [§D]
+'%C_Back = RVB  221 255 222	' background color of the plate or N
+%C_Back = RVB  255 255 255	' background color of the plate or N
+
+%RD = 8.6		' radius of the cut around the axis of the galva
+
+%D_Hole = 2.6	' diameter of the fixing holes
+%X21 = 31.5/2	' horizontal distance left hole-galva axis
+%X22 = 31.5/2	' horizontal distance right hole-galva axis
+'%Y2 = 7.9		' vertical distance holes-galva axis
+%Y2 == 2.5 + 3.5' vertical distance holes-galva axis
+%C_Hole = RVB  150 150 150'white	' Color of the holes or N
+
+Goto Trace_Cadre
+L1a:
+
+' Echelle supérieure [Upper scale)
+' Arc = 42, 150, 23
+Arc = 45, 135, 31.1
+'%G =0,25.1,34.6,46.5,61.2,79.2,100
+'%G =0,25.1,34.6,61.2,79.2,100
+%G =0,31.6,44.7,54.8,63.2,70.7,77.5,83.7,89.4,94.9,100
+Grad1 = %G§%G,2.8
+'%A = -10 ,-5 ,-4 ,-3 ,-2 ,-1 ,0
+'%A = 0 ,2 ,4 ,6 ,8 ,10
+%A = 0,1,2,3,4,5,6,7,8,9,10
+Val1R = ,%G§%G,%A§,4.4
+
+Couleur = Bleu
+%G =0,31.6,44.7,54.8,63.2,70.7,77.5,83.7,89.4,94.9,100
+Grad1 = %G§%G,-2.8
+%A = 0,0.1,0.2,,0.4,,0.6,,0.8,,1
+Val1R = ,%G§%G,%A§,-4.5
+Couleur = Noir
+
+%G =0.00,14.14,20.00,24.49,28.28,31.62,34.64,37.42,40.00,42.43,44.72,46.90,48.99,50.99,52.92,54.77,56.57,58.31,60.00,61.64,63.25,64.81,66.33,67.82,69.28,70.71,72.11,73.48,74.83,76.16,77.46,78.74,80.00,81.24,82.46,83.67,84.85,86.02,87.18,88.32,89.44,90.55,91.65,92.74,93.81,94.87,95.92,96.95,97.98,98.99,100.00
+Grad1 = %G§%G,1.5,.1mm
+Couleur = Bleu
+Grad1 = %G§%G,-1.5,.1mm
+Couleur = Noir
+
+'Texte = 0, 15,,CGS,Watts
+Texte = 0, 18,,*2bc,Watts
+Texte = 0, 12,,*1.5bc,CalQRP Power Meter
+
+'Droite -25.4,25.4,50
+
+Texte = 0, 52,,*1.5bc,2"
+Droite -25.4,25.4,50
+
+Texte = 0, 57,,*1.5bc,50mm
+Droite -25,25,55
+
+
+'jds %G =3,6.8,11.5,17.55, _
+'jds 26.8,28.7,30.6,32.5, _
+'jds 36.75,39.05,41.4,43.9, _
+'jds 49.2,51.9,54.9,58, _
+'jds 64.55,68,71.55,75.35, _
+'jds 83.15,87.3,91.5,95.9
+'jds Grad1 = %G§%G,1.5,.1mm
+
+'jds Texte = 0, 21,,CGS,Manual scales by lists
+
+
+
+
+
+
+
+'jds TailleP = *1 I
+'jds Couleur = Noir
+'jds Texte = -27, 0,,R90CI,F5BU
+'jds Image = Galva.ico,-25,0,.5,y
+'jds 
+'jds Texte = 30,-8,,*.8D,%File
+'jds Texte = 0, -10,,C,Echelles "manuelles" avec des listes
+
+
+
+
+Stop
+
+
+
+
+
+' Definition of needle deviation for scales
+' ------------------------------------------------
+%r_Arc = 40	' arc radius of the scale
+%C_Arc = blue	' scale arc color or n
+%e_Arc= .3	' thickness of the scale arc
+%AD1= 40	' deviation from the left to the midday position
+%AD2 =40	' deviation from midday position to the right
+%Decal_Arc = -8	' vertical offset of the axis to draw the scale arc
+%2_Arc = 1	' try 0
+
+' Global positioning
+'CT = %X0,%Y0,n
+'RefCur = %CTx,%CTy
+
+C0:
+Goto C1	' Put / remove the apostrophe to draw the image or not
+' -------------------------------------------------
+' Eventual original image in the background
+' -------------------------------------------------
+%C_Back = N
+%C_Arc = magenta
+%e_CT = .05
+Image = Galva_Arc_ori.jpg,-33.7,-5.9,.32
+Trait = 0,0,90+%AD1 °,80,,magenta
+Trait = 0,0,90-%AD2 °,80,,magenta
+Arc =90-%AD1,90+%AD2,%r_Arc,%C_Arc
+'Stop
+
+C1:
+'Goto C2	' Put / remove the apostrophe to draw the plate or not
+' Plate drawing
+' -----------------
+Goto Trace_Cadre
+L1:
+' Back here after the plate drawing
+'Stop
+
+C2:
+If %Decal_Arc<>0 then Decal =%Decal_Arc,red
+Police = Arial
+
+' - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+'  2nd part: The scales
+'    Use the input masks (F2) to modify the scale parameters.
+'    Apostrophe placed or not at the beginning of Goto line 
+'    allows to draw or not a scale
+' - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+E1:
+Goto E2	' Put / remove the apostrophe to draw the scale or not
+' Drawing of the first linear scale (10V) 
+' ----------------------------------------------
+'Inversion		' reverse the side of the graduations and values
+EpaisT = %e_Arc mm
+' Put an apostrophe at the beginning of the following line for only 1 arc
+Arc =90-%AD1,90+%AD2,%r_Arc+%2_Arc,%C_Arc ' 2th Arc
+Arc =90-%AD1,90+%AD2,%r_Arc,%C_Arc
+GCE_E =,,10§50,,§.15 mm,%C_Arc§%C_Arc,,0,10,,V,%C_Arc,Arial,1.2 g,,,,D
+TailleP = *1.2 g
+'Val1D =,50,V,5,%C_Arc
+'Inversion		' reverse the side of the graduations and values
+'Stop
+
+E2:
+Goto E21	' Put / remove the apostrophe to draw the scale or not
+' Drawing of a second linear scale (3A)
+' ----------------------------------------------
+Inversion		' reverse the side of the graduations and values
+EpaisT = %e_Arc mm
+%2_Arc=-%2_Arc
+%r_Arc==%r_Arc-.5	' new radius
+%C_Arc = black	' new color
+' Put an apostrophe at the beginning of the following line for only 1 arc
+Arc =90-%AD1,90+%AD2,%r_Arc+%2_Arc,%C_Arc ' 2th Arc
+Arc =90-%AD1,90+%AD2,%r_Arc,%C_Arc
+GCE_E =,,6§30,1.5§1,.3mm§.15mm,%C_Arc§%C_Arc,6,0,3,3,A,%C_Arc,Arial,.8 g,,,,D
+Inversion		' reverse the side of the graduations and values
+'Stop
+
+E21:
+Goto E3	' Put / remove the apostrophe to draw the scale or not
+' Attention, only one of the blocks E2 or E21 must be executed
+' Drawing of 'Manual" scale (3A) 
+'--------------------------------------
+Inversion		' reverse the side of the graduations and values
+EpaisT = %e_Arc mm
+%r_Arc == %r_Arc-.5
+%2_Arc=-%2_Arc
+%C_Arc = noir
+Couleur = %C_Arc
+TailleP = *.8 g
+' Put an apostrophe at the beginning of the following line for only 1 arc
+Arc =90-%AD1,90+%AD2,%r_Arc+%2_Arc,%C_Arc ' 2th Arc
+Arc =90-%AD1,90+%AD2,%r_Arc,%C_Arc
+'GCE_E =,,6§30,1.5§1,.3mm§.15mm,%C_Arc§%C_Arc,6,0,3,3.2,A,%C_Arc,Arial,.8 g,1.2,,,D
+'Couleur = magenta
+%G=5.9,10.5,14.7,18.65,26.15,29.75,33.3,36.7, _
+  43.4,46.6,49.8,53,59.2,62.3,65.35,68.4, _
+  74.3,77.2,80.1,83.05,88.8,91.6,94.4,97.2
+Grad1 =%G§%G,1,.15mm
+%G=0,22.55,40.1,56.15,71.3,85.95,100
+Grad1 =%G§%G,2,.3mm
+%V=0,0.5,1,1.5,2,2.5,3A
+Val1D =,%G§%G,%V§txt,3.2,%C_Arc
+Inversion		' reverse the side of the graduations and values
+'Stop
+
+E3:
+Goto E4	' Put / remove the apostrophe to draw the scale or not
+' Drawing of a cutout for a "mirror" zone
+' -----------------------------------------------
+EpaisT = .1mm
+%r_Arc = 34
+%R1= .8	' half width of the zone
+Arc = 90-%AD1,90+%AD2,%r_arc,n  'Cercle = 0, -8.,  40.46, 57.3, 122.7
+' Remove the quotes from the next 4 lines for another solution
+'  SectP =-2,102,%r_Arc-%R1,%r_Arc+%R1,%C_Hole
+'  Sect =-2,102,%r_Arc-%R1,%r_Arc+%R1,cyan
+'  TexteC =0,%Decal_Arc-.5,40.46,90,cyan,*.6x,M i r r o r   a r e a   c u t t i n g
+'  Goto E31
+SectP =0,100,%r_Arc-%R1,%r_Arc+%R1,%C_Hole
+Trait = 0,%Decal_Arc,122.7 °,40.46,,n
+CercleP = ,,%R1,,,%C_Hole
+Trait = 0,%Decal_Arc,57.3 °,40.46,,n
+CercleP = ,,%R1,,,%C_Hole
+TexteC =0,%Decal_Arc-.5,40.46,90,cyan,*.6x,M i r r o r   a r e a   c u t t i n g
+Arc = 90-%AD1,90+%AD2,%r_arc-%R1,cyan
+Arc = 90-%AD1,90+%AD2,%r_arc+%R1,cyan
+Trait = 0,%Decal_Arc,122.7 °,40.46,,n
+Cercle = ,,%R1,,,cyan
+Trait = 0,%Decal_Arc,57.3 °,40.46,,n
+Cercle = ,,%R1,,,cyan
+E31:
+EpaisT = %e_Arc mm
+'Stop
+
+E4:
+Goto E5	' Put / remove the apostrophe to draw the scale or not
+' Drawing of a non-linear scale (30W)
+' --------------------------------------------
+Inversion		' reverse the side of the graduations and values
+%r_Arc =32.5	' new radius
+%C_Arc = RVB  179 89 0	' new color
+%2_Arc=-.8
+Exposant = 2	' change of the linearity
+EpaisT = %e_Arc mm
+' Put an apostrophe at the beginning of the following line for only 1 arc
+'Arc =90-%AD1,90+%AD2,%r_Arc+%2_Arc,%C_Arc
+Arc =90-%AD1,90+%AD2,%r_Arc,%C_Arc
+' Drawing of graduations by sector for a non-linear scale
+GCE_E =,,6§30§60,1.5§1§.6,.5mm§.18mm§.12mm,%C_Arc§%C_Arc§%C_Arc,30,0,30,3,,%C_Arc,Arial,.8g,2,,5/30,D,,c
+GCE_E =,,6§30§60,1.5§1§.6,.5mm§.18mm§.12mm,%C_Arc§%C_Arc§%C_Arc,6,0,30,3,,%C_Arc,Arial,.8g,2,5/30,20/30,D,,c
+GCE_E =,,6§30,1.5§1§.6,.5mm§.18mm,%C_Arc§%C_Arc,3,0,30,3,W,%C_Arc,Arial,.8g,2,20/30,,D,,c
+Exposant=1
+' If necessary, the following 2 lines refine the Arc at 0 and 100%
+EpaisT = 1
+SectP =-.5,100.5,%r_Arc-%e_Arc/5,%r_Arc+%e_Arc/2,%C_Arc
+Inversion		' reverse the side of the graduations and values
+'Stop
+
+E5:
+Goto E6	' Put / remove the apostrophe to draw the scale or not
+' Drawing of a Logarithmic Scale (20mV)
+' -----------------------------------------------
+Inversion		' reverse the side of the graduations and values
+%r_Arc =27	' new radius
+%C_Arc = RVB  0 191 0	' new color
+%2_Arc= .6
+Exposant = L,2,5,2	' change of the linearity
+EpaisT = %e_Arc mm
+%R1==(%AD1+%AD2)/10	' 1/10 shift from the scale start
+' Put an apostrophe at the beginning of the following line for only 1 arc
+'Arc =90-%AD1+%R1,90+%AD2,%r_Arc+%2_Arc,%C_Arc
+Arc =90-%AD1+%R1,90+%AD2,%r_Arc,%C_Arc
+Grad =.5,.5,,,%e_Arc/2 mm,%C_Arc
+Grad =1,1,,,%e_Arc/1.5 mm,%C_Arc
+Grad =5,1.5,,,%e_Arc/1.2 mm,%C_Arc
+Police = Arial
+TailleP = *.8 g
+ValD =,1§3,.1,§mV,2.6,,,%C_Arc
+ValD =,5,.1,,2.6,,,%C_Arc
+Exposant = 1
+Inversion		' reverse the side of the graduations and values
+'Stop
+
+E6:
+Goto E7	' Put / remove the apostrophe to draw the scale or not
+' Drawing of 3 solid colored sectors 1 in fine lines
+' ----------------------------------------------------------
+EpaisT=1
+%R1=21.5
+%R2==%R1+1.5
+Arc =90-%AD1,90+%AD2,%r_Arc,n
+SectP =0,75,%R1,%R2,green
+SectP = 75,90,%R1,%R2,RVB  244 174 11
+SectP = 90,100,%R1,%R2,red
+' Example of drawing a sector in fine line
+EpaisT = .1mm
+Sect =0,75,%R1,%R2,RVB  1 190 15
+TexteC = 0,%Decal_Arc,%R1+6.8,90+22,white,*.6bx,Danger
+'Stop
+
+E7:
+Goto E8	' Put / remove the apostrophe to draw the scale or not
+' Examples of "Text" values
+' --------------------------------
+Inversion		' reverse the side of the graduations and values
+TailleP = *.5 g
+%r_Arc =28	' new radius
+%C_Arc = blue
+Arc =90-%AD1,90+%AD2,%r_Arc,n
+%R1 = 8
+Val1D = ,0,SOUTH,%R1,%C_Arc
+Val1D = ,25,WEST,%R1,%C_Arc
+Val1D = ,50,NORTH,%R1,%C_Arc
+Val1D = ,75,EAST,%R1,%C_Arc
+Val1D = ,100,SOUTH,%R1,%C_Arc
+%R1=10.5
+Val1R = .01,0,SOUTH,%R1,%C_Arc
+Val1R = .01,25,WEST,%R1,%C_Arc
+Val1R = ,50,NORTH,%R1,%C_Arc
+Val1R = r90,75,EAST,%R1,%C_Arc
+Val1R = .01,100,SOUTH,%R1,%C_Arc
+Inversion		' reverse the side of the graduations and values
+'Stop
+
+E8:
+Goto E9	' Put / remove the apostrophe to draw the scale or not
+' Adding a Title and / or Text (s)
+' ------------------------------------
+Texte = 0,48,blue,*1.8bc,My Galva
+Texte = 26.5,23,black,*.6c,Comment%CR on 2 lines
+GCE_TexteV = -31,35,Vertical text,-.6,.7c,black,Arial
+GCE_Texte = -25, 13,Text,-.07,,vert,Arial,45
+Texte = -27,20,,*.5c,F5BU
+Texte = %Plate_Width/4+2,-6.5,black,*.8c,File  %File
+'Stop
+
+E9:
+' Adding Image(s)
+' --------------------
+' Image = galva.ico,-27,23,.4,c
+
+' Personal code
+' -----------------
+
+
+
+
+
+Goto Fin
+ 
+' = = = = = = = = = = = = = = = = = = = 
+Trace_Cadre:
+' Plate drawing
+' ----------------
+Couleur = %C_Plate
+EpaisT = %e_Plate mm
+If %Plate_Height = 0 then
+  CercleP = -%X1+%Plate_Width/2,-%Y1+%Plate_Width/2,%Plate_Width/2,,,%C_Back
+  CercleP = -%X21,%Y2,%D_Hole/2,,,%C_Hole
+  CercleP = %X22,%Y2,%D_Hole/2,,,%C_Hole
+  Cercle = -%X1+%Plate_Width/2,-%Y1+%Plate_Width/2,%Plate_Width/2,,,%C_Plate
+  If %RD>0 then
+    CercleP =0,0,%RD,,,%C_Hole
+    CadreP = -%RD,-%Y1,%RD,0,%C_Hole
+    Trait = -%RD,-%Y1,0r,0
+    Cercle = 0,0,%RD,0,180
+    Trait = %RD,-%Y1,0r,0
+  EndIf
+Else
+  CadreAP = -%X1,-%Y1,%Plate_Width r,%Plate_Height r,%R_Plate,%C_Back
+  CercleP = -%X21,%Y2,%D_Hole/2,,,%C_Hole
+  CercleP = %X22,%Y2,%D_Hole/2,,,%C_Hole
+  CadreA = -%X1,-%Y1,%Plate_Width r,%Plate_Height r,%R_Plate,%C_Plate
+  If %RD>0 then
+    CercleP =0,0,%RD,,,%C_Hole
+    CadreP =-%RD,-%Y1,%RD,0,%C_Hole
+    CadreP =-11,0,11,%RD-2,%C_Hole
+    Trait = -%RD,-%Y1,0r,%Y1 r
+    Cercle = 0,0,%RD,0,180
+    Trait = %RD,0,0r,-%Y1 r
+  EndIf
+EndIf
+If %D_Hole>0 then
+  Cercle = -%X21,%Y2,%D_Hole/2
+  Cercle = %X22,%Y2,%D_Hole/2
+EndIf
+Couleur = %C_CT
+EpaisT = %e_CT mm
+Plus = 0,0,1
+Goto L1a
+'Goto L1
+
+
+Fin:
